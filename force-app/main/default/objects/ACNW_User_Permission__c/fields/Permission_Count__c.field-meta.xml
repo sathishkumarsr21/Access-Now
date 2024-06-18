@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Permission_Count__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Permission Count to keep track of how many times an approved permission set is used by an user.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Permission Count to keep track of how many times an approved permission set is used by an user.</inlineHelpText>
+    <label>Permission Count</label>
+    <summaryForeignKey>ACNW_Request_Permission__c.User_Permission__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

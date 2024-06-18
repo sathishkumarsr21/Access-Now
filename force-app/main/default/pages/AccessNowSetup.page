@@ -1,0 +1,90 @@
+<apex:page showHeader="false" sidebar="false" lightningStylesheets="true" controller="AccessNowSetup">
+    <style>
+        li { padding-bottom: 10px; }
+    </style>
+    <script>
+    	var siteZipContents;
+    	var remoteSiteSettingZipContents;
+    </script>
+<c:zipFile >
+ <apex:repeat value="{!siteZipContents}" var="zc">
+ <c:zipEntry path="{!zc.fileName}" content="{!zc.content}" />
+ </apex:repeat>
+</c:zipFile>
+	<script>
+    	siteZipContents = zipFile;
+    </script>
+
+    <script>
+    var funcPending = false;
+    function doSiteDeploy() {
+        if (funcPending) return;
+        funcPending = true;
+        zipFile = siteZipContents;
+      	generateZip(function(dat) {
+        	deploy(dat);
+      	});
+    }
+    function doRemoteSiteSettingDeploy() {
+        if (funcPending) return;
+        funcPending = true;
+        zipFile = remoteSiteSettingZipContents;
+        if (zipFile) {
+	        generateZip(function(dat) {
+    	    	remoteSiteSettingDeploy(dat);
+      		});
+        } else {
+            remoteSiteSettingDeploy(null);
+        }
+    }
+    function funcComplete() {
+        funcPending = false;
+    }
+    function doSetupUser() {
+        if (funcPending) return;
+        funcPending = true;
+        setupUser();
+	}
+    </script>
+
+    <apex:pageBlock title="Setup">
+        <apex:form >
+            <apex:pageMessages id="messages" />
+            <apex:actionFunction name="setupUser" action="{!setupUser}" oncomplete="funcComplete()" reRender="messages,checklist" />
+            <apex:actionFunction name="deploy" action="{!deploy}" oncomplete="funcComplete()" status="status" reRender="messages,cxa">
+              <apex:param name="zip" value="" />
+            </apex:actionFunction>
+			<apex:actionFunction name="remoteSiteSettingDeploy" action="{!remoteSiteSettingDeploy}" oncomplete="funcComplete()" status="status" reRender="messages,cxa">
+              <apex:param name="zip" value="" />
+            </apex:actionFunction>
+            <apex:outputPanel layout="none" id="cxa">
+              <apex:outputPanel rendered="{!asyncId != null}">
+                  <script>
+                  document.location.href = '/changemgmt/monitorDeployment.apexp?id={!JSENCODE(asyncId)}';
+                  </script>
+              </apex:outputPanel>
+            </apex:outputPanel>
+        </apex:form>
+
+        <apex:outputPanel id="checklist">
+            <apex:variable rendered="{!accessNowSiteSetup}" var="junk" value="1">
+                <script>
+					remoteSiteSettingZipContents = false;
+    			</script>
+				<c:zipFile >
+ 					<apex:repeat value="{!remoteSiteSettingZipContents}" var="zc">
+ 						<c:zipEntry path="{!zc.fileName}" content="{!zc.content}" />
+ 					</apex:repeat>
+				</c:zipFile>
+                <script>
+                	remoteSiteSettingZipContents = zipFile;
+                </script>
+            </apex:variable>
+        <ul>
+            <li>accessnow site created - &nbsp;<apex:outputText value="{!if(accessNowSiteSetup,'Complete','Pending')}" />&nbsp; - <a href="javascript:void(0)" onclick="doSiteDeploy()">Auto Setup</a></li>
+            <li>accessnow site user updated - &nbsp;<apex:outputText value="{!if(accessNowSiteUserSetup,'Complete','Pending')}" />&nbsp; - <a href="javascript:void(0)" onclick="doSetupUser()">Auto Setup</a></li>
+            <li>accessnow remote site setting created - &nbsp;<apex:outputText value="{!if(accessNowCustomSettingSetup,'Complete','Pending')}" />&nbsp; - <a href="javascript:void(0)" onclick="doRemoteSiteSettingDeploy()">Auto Setup</a></li>
+        </ul>
+        </apex:outputPanel>
+    </apex:pageBlock>
+</apex:page>

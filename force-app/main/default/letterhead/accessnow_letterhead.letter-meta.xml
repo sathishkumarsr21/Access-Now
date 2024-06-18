@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Letterhead xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <backgroundColor>#000000</backgroundColor>
+    <bodyColor>#FFFFFF</bodyColor>
+    <bottomLine>
+        <color>#FF0000</color>
+        <height>5</height>
+    </bottomLine>
+    <description>creation of accessnow letterhead for use in the email templates</description>
+    <footer>
+        <backgroundColor>#FFFFFF</backgroundColor>
+        <height>50</height>
+        <horizontalAlignment>Right</horizontalAlignment>
+        <logo>accessnow/user_permission_icon_for_tab.jpg</logo>
+        <verticalAlignment>Top</verticalAlignment>
+    </footer>
+    <header>
+        <backgroundColor>#999999</backgroundColor>
+        <height>100</height>
+        <horizontalAlignment>Center</horizontalAlignment>
+        <logo>accessnow/accessnow_logo_jpg2.png</logo>
+        <verticalAlignment>Top</verticalAlignment>
+    </header>
+    <middleLine>
+        <color>#FF0000</color>
+        <height>5</height>
+    </middleLine>
+    <name>accessnow letterhead</name>
+    <topLine>
+        <color>#FF0000</color>
+        <height>5</height>
+    </topLine>
+</Letterhead>

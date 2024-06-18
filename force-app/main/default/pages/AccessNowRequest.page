@@ -1,0 +1,724 @@
+<apex:page standardController="ACNW_Request__c" extensions="AccessNowRequestController" title="accessnow Request" tabStyle="ACNW_Request__c" docType="html-5.0">
+<apex:slds />
+<apex:includeScript value="{!$Resource.jquery_js}"/>
+<style>
+.slds-scope .slds-page-header { background: transparent; border-bottom: 0px; }
+
+.slds-card__body {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: .75rem;
+}
+
+td.profileRO > div { float: right; min-width: 20%;  margin-left: 10px; text-align: center;  }
+
+.slds-hyphenate { white-space: normal !important; }
+
+div.requiredBlock { background-color:#c00;position:absolute;left:-4px;width:3px;top:1px;bottom:1px; }
+
+.msgIcon {
+    display: none!important
+}
+.customMessage * {
+    color: #fff!important
+}
+.customMessage {
+    margin: 5px 0!important;
+    max-width: 1280px;
+    opacity: 1!important;
+    width: 100%;
+    font-size: 12px;
+    border: 0px;
+    padding-left: 10px;
+}
+.message {
+    opacity: .1
+}
+
+.status_Draft { color: #ffb75d !important; }
+.status_Error, .status_Rejected, .status_Cancelled { color: #c23934 !important }
+.status_Completed { color: #04844b !important }
+
+</style>
+<script>
+$(document).ready(function(){
+    updateMessageClass();
+});
+function updateMessageClass() {
+    var textureEffect = 'slds-theme--alert-texture';
+    $('.warningM3').addClass('slds-notify slds-notify--toast slds-theme--warning customMessage '+textureEffect);          
+    $('.confirmM3').addClass('slds-notify slds-notify--alert slds-theme--success  customMessage '+textureEffect);    
+    $('.errorM3').addClass('slds-notify slds-notify--alert slds-theme--error customMessage '+textureEffect);                  
+    $('.infoM3').addClass('slds-notify slds-notify--toast customMessage '+textureEffect);    
+
+    $('.errorM3').removeClass('errorM3');
+    $('.confirmM3').removeClass('confirmM3');
+    $('.infoM3').removeClass('infoM3');
+    $('.warningM3').removeClass('warningM3');
+
+    var mx = $('.customMessage .messageText');
+    if (mx.length) {
+        mx = mx.html().split('</span>');
+    	if (mx[1]) mx[1] = mx[1].replace(/\n/g, '<br />');
+    	$('.customMessage .messageText').html(mx.join('</span>'));
+    }
+}
+setFocusOnLoad = function() {}
+</script>
+
+<div class="slds-scope">
+
+<apex:form id="mainForm">
+
+<div class="slds-page-header">
+  <div class="slds-grid">
+    <div class="slds-col slds-has-flexi-truncate">
+      <div class="slds-media slds-no-space slds-grow">
+          <!--
+        <div class="slds-media__figure">
+        </div>
+        -->
+        <div class="slds-media__body">
+          <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate"><apex:outputText value="{!if(req.Id == null,'New Request',req.Name)}" /></h1>
+          <p class="status_{!req.Status__c} slds-text-title--caps slds-line-height--reset"><apex:outputField value="{!req.Status__c}" /></p>
+        </div>
+      </div>
+    </div>
+    <div class="slds-col slds-no-flex slds-grid slds-align-top">
+      <div class="slds-button-group" role="group">
+            <apex:commandButton value="{!$Label.accessnow__buttonsave}" action="{!save}" rendered="{!allowSave}" styleClass="slds-button slds-button--neutral" />
+            <apex:commandButton value="{!$Label.accessnow__buttonsaveandsubmitforapproval}" action="{!submitForApproval}" rendered="{!allowSubmitForApproval}" styleClass="slds-button slds-button--neutral" />
+            <apex:commandButton value="{!$Label.accessnow__buttoncancelrequest}" immediate="true" action="{!cancel}" rendered="{!allowCancel}" styleClass="slds-button slds-button--neutral" />
+            <apex:commandButton value="{!$Label.accessnow__buttonretry}" immediate="true" action="{!retry}" rendered="{!allowRetry}" styleClass="slds-button slds-button--neutral" />
+            <apex:commandButton value="{!$Label.accessnow__buttonrevoke}" immediate="true" action="{!revoke}" rendered="{!allowRevoke}" styleClass="slds-button slds-button--neutral" />
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<apex:pageMessages id="messages" />
+
+<!-- start editable view -->
+<apex:outputPanel rendered="{!allowSave}" layout="none">
+
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__sectionheadersettings}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+
+<fieldset class="slds-form--compound">
+  <legend class="slds-form-element__label"></legend>
+  <div class="form-element__group">
+    <div class="slds-form-element__row">
+      <div class="slds-form-element slds-size--1-of-2">
+        <c:LightningOutputField sObject="{!req}" field="OwnerId" label="{!$Label.accessnow__lbl_requester}" />
+      </div>
+        <apex:variable var="fieldCount" value="{!1}" />
+		<apex:repeat value="{!$ObjectType.ACNW_Request__c.FieldSets.Request_Form_Fields}" var="f">
+            <apex:variable value="{!1}" var="displayFunc" rendered="{!f.FieldPath != 'accessnow__Provision_Immediately__c' && f.FieldPath != 'accessnow__Requested_Start_Time__c'}">
+                <div class="slds-form-element slds-size--1-of-2">
+                    <apex:variable var="onchange" value="" />
+                    <apex:variable var="onchange" value="reloadUserPermsFunc(document.getElementById(this.id + '_lkid').value)" rendered="{!f.FieldPath == 'accessnow__Request_on_Behalf_Of__c'}" />
+                    <c:LightningInputField onchange="{!onchange}" sObject="{!req}" required="{!f.Required || f.DBRequired}" field="{!f.FieldPath}" />
+                </div>
+                <apex:variable value="{!fieldCount + 1}" var="fieldCount" />
+                <apex:variable value="{!1}" var="junk" rendered="{!mod(fieldCount, 2) == 0}">
+                    <script>
+                    document.write('</div><div class="slds-form-element__row">');
+                    </script>
+                </apex:variable>
+            </apex:variable>
+        </apex:repeat>
+    </div>
+
+    <apex:outputPanel id="inputArea">
+        <apex:actionregion >
+            <apex:variable value="{!0}" var="showProvImmediately" />
+            <apex:variable value="{!0}" var="showStartDate" />
+            <apex:repeat value="{!$ObjectType.ACNW_Request__c.FieldSets.Request_Form_Fields}" var="f">
+                <apex:variable value="{!1}" var="showProvImmediately" rendered="{!f.FieldPath == 'accessnow__Provision_Immediately__c'}" />
+                <apex:variable value="{!1}" var="showStartDate" rendered="{!f.FieldPath == 'accessnow__Requested_Start_Time__c'}" />
+            </apex:repeat>
+
+            <div class="slds-form-element__row">
+              <div class="slds-form-element slds-size--1-of-2">
+                <c:LightningInputField sObject="{!req}" field="accessnow__Duration_Hours__c" />
+              </div>
+              <apex:variable value="{!0}" var="junk" rendered="{!showProvImmediately == 0 || showStartDate == 0}">
+                  <div class="slds-form-element slds-size--1-of-2">&nbsp;</div>
+              </apex:variable>
+              <apex:variable value="{!0}" var="junk" rendered="{!showProvImmediately == 1 && showStartDate == 1}">
+                  <div class="slds-form-element slds-size--1-of-2">
+                      <label class="slds-form-element__label" for="{!$Component.provisionImmediatelyCheckbox}"><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Provision_Immediately__c'].Label}" /></label>
+                      <div class="slds-form-element__control">
+                          <label class="slds-checkbox--toggle slds-grid">
+                              <apex:inputField id="provisionImmediatelyCheckbox" value="{!req.Provision_Immediately__c}">
+                                  <apex:actionSupport event="onchange" rerender="inputArea" />
+                              </apex:inputField>
+                              <span class="slds-checkbox--faux_container" aria-live="assertive">
+                                  <span class="slds-checkbox--faux"></span>
+                                  <span class="slds-checkbox--on"><apex:outputText value="{!$Label.accessnow__lbl_yes}" /></span>
+                                  <span class="slds-checkbox--off"><apex:outputText value="{!$Label.accessnow__lbl_no}" /></span>
+                              </span>
+                          </label>
+                      </div>
+                  </div>
+                </apex:variable>
+            </div>
+            <apex:outputPanel rendered="{!!req.Provision_Immediately__c && showStartDate == 1}">
+            <div class="slds-form-element__row">
+              <div class="slds-form-element slds-size--1-of-2">
+                  <c:LightningInputField sobject="{!req}" field="accessnow__Requested_Start_Time__c" />
+              </div>
+              <div class="slds-form-element slds-size--1-of-2">&nbsp;</div>
+            </div>
+            </apex:outputPanel>
+        </apex:actionregion>
+    </apex:outputPanel>
+  </div>
+
+  <apex:outputPanel layout="none" rendered="{!req.Id != null}">
+    <div class="slds-form-element__row">
+      <div class="slds-form-element slds-size--1-of-2">
+          <c:LightningOutputField sobject="{!req}" field="CreatedById" label="{!$Label.accessnow__lbl_createdby}" />
+      </div>
+      <div class="slds-form-element slds-size--1-of-2">
+          <c:LightningOutputField sobject="{!req}" field="LastModifiedById" label="{!$Label.accessnow__lbl_modifiedby}" />
+      </div>
+    </div>
+    <div class="slds-form-element__row">
+      <div class="slds-form-element slds-size--1-of-2">
+          <c:LightningOutputField sobject="{!req}" field="CreatedDate" />
+      </div>
+      <div class="slds-form-element slds-size--1-of-2">
+          <c:LightningOutputField sobject="{!req}" field="LastModifiedDate" />
+      </div>
+    </div>
+    <div class="slds-form-element__row">
+      <div class="slds-form-element slds-size--1-of-2">
+          <c:LightningOutputField sobject="{!req}" field="accessnow__Admin_Page__c" />
+      </div>
+    </div>
+  </apex:outputPanel>
+</fieldset>
+</div>
+</article>
+
+<div style="margin-top: 1rem"></div>
+
+<apex:outputPanel id="userOptionsBlock">
+	<apex:outputPanel layout="none" rendered="{!accessNowPermGroups != null && accessNowPermGroups.size > 0}">
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__sectionheaderaccessnowpermissiongroups}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+<fieldset class="slds-form-element">
+  <div class="slds-form-element__control">
+      <div class="slds-grid slds-wrap slds-grid--pull-padded">
+      <apex:repeat value="{!accessNowPermGroups}" var="perm">
+        <div class="slds-m-bottom--medium slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-3">
+        <span class="slds-checkbox">
+          <label class="slds-checkbox__label">
+          <apex:inputCheckbox styleclass="slds-input" value="{!perm.checked}" />
+            <span class="slds-checkbox--faux"></span>
+            <span class="slds-form-element__label"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></span>
+          </label>
+        </span>
+        </div>
+      </apex:repeat>
+      </div>
+  </div>
+</fieldset>
+  </div>
+</article>
+</apex:outputPanel>
+
+	<apex:outputPanel layout="none" rendered="{!perms != null && perms.size > 0}">
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__sectionheaderpermissions}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+<fieldset class="slds-form-element">
+  <div class="slds-form-element__control">
+      <div class="slds-grid slds-wrap slds-grid--pull-padded">
+      <apex:repeat value="{!perms}" var="perm">
+        <div class="slds-m-bottom--medium slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-3">
+        <span class="slds-checkbox">
+          <label class="slds-checkbox__label">
+          <apex:inputCheckbox styleclass="slds-input" value="{!perm.checked}" />
+            <span class="slds-checkbox--faux"></span>
+            <span class="slds-form-element__label"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></span>
+          </label>
+        </span>
+        </div>
+      </apex:repeat>
+      </div>
+  </div>
+</fieldset>
+  </div>
+</article>
+</apex:outputPanel>
+
+	<apex:outputPanel layout="none" rendered="{!permGroups != null && permGroups.size > 0}">
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__sectionheaderpermissiongroups}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+<fieldset class="slds-form-element">
+  <div class="slds-form-element__control">
+      <div class="slds-grid slds-wrap slds-grid--pull-padded">
+      <apex:repeat value="{!permGroups}" var="perm">
+        <div class="slds-m-bottom--medium slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-3">
+        <span class="slds-checkbox">
+          <label class="slds-checkbox__label">
+          <apex:inputCheckbox styleclass="slds-input" value="{!perm.checked}" />
+            <span class="slds-checkbox--faux"></span>
+            <span class="slds-form-element__label"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></span>
+          </label>
+        </span>
+        </div>
+      </apex:repeat>
+      </div>
+  </div>
+</fieldset>
+  </div>
+</article>
+</apex:outputPanel>
+
+	<apex:outputPanel layout="none" rendered="{!profiles != null && profiles.size > 0}">
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__sectionheaderprofiles}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+<fieldset class="slds-form-element">
+  <div class="slds-form-element__control">
+      <div class="slds-grid slds-wrap slds-grid--pull-padded">
+      <apex:repeat value="{!profiles}" var="perm">
+        <div class="slds-m-bottom--medium slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-3">
+        <span class="slds-checkbox">
+          <label class="slds-checkbox__label">
+          <apex:inputCheckbox styleclass="slds-input" value="{!perm.checked}" />
+            <span class="slds-checkbox--faux"></span>
+            <span class="slds-form-element__label"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></span>
+          </label>
+        </span>
+      </div>
+      </apex:repeat>
+      </div>
+  </div>
+</fieldset>
+  </div>
+</article>
+</apex:outputPanel>
+
+	<apex:outputPanel layout="none" rendered="{!roles != null && roles.size > 0}">
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__sectionheaderroles}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+<fieldset class="slds-form-element">
+  <div class="slds-form-element__control">
+      <div class="slds-grid slds-wrap slds-grid--pull-padded">
+      <apex:repeat value="{!roles}" var="perm">
+        <div class="slds-m-bottom--medium slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--1-of-3">
+        <span class="slds-checkbox">
+          <label class="slds-checkbox__label">
+          <apex:inputCheckbox styleclass="slds-input" value="{!perm.checked}" />
+            <span class="slds-checkbox--faux"></span>
+            <span class="slds-form-element__label"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></span>
+          </label>
+        </span>
+      </div>
+      </apex:repeat>
+      </div>
+  </div>
+</fieldset>
+  </div>
+</article>
+</apex:outputPanel>
+</apex:outputPanel>
+
+<div class="slds-page-header">
+  <div class="slds-grid">
+    <div class="slds-col slds-has-flexi-truncate">&nbsp;</div>
+    <div class="slds-col slds-no-flex slds-grid slds-align-top">
+      <div class="slds-button-group" role="group">
+            <apex:commandButton value="{!$Label.accessnow__buttonsave}" action="{!save}" rendered="{!allowSave}" styleClass="slds-button slds-button--neutral" />
+            <apex:commandButton value="{!$Label.accessnow__buttonsaveandsubmitforapproval}" action="{!submitForApproval}" rendered="{!allowSubmitForApproval}" styleClass="slds-button slds-button--neutral" />
+            <apex:commandButton value="{!$Label.accessnow__buttoncancelrequest}" immediate="true" action="{!cancel}" rendered="{!allowCancel}" styleClass="slds-button slds-button--neutral" />
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</apex:outputPanel>
+<!-- end editable view -->
+
+<!-- start readonly view -->
+<apex:outputPanel rendered="{!!allowSave}" layout="none">
+
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__sectionheadersettings}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+
+<table class="slds-table slds-table--bordered slds-table--cell-buffer">
+  <tbody>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$Label.accessnow__lbl_requester}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.OwnerId}" /></div>
+      </td>
+    </tr>
+    <apex:repeat value="{!$ObjectType.ACNW_Request__c.FieldSets.Request_Form_Fields}" var="f">
+	<apex:variable value="{!1}" var="displayFunc" rendered="{!f.FieldPath != 'accessnow__Provision_Immediately__c' && f.FieldPath != 'accessnow__Requested_Start_Time__c'}">
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!f.Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req[f.FieldPath]}" /></div>
+      </td>
+    </tr>
+    </apex:variable>
+    </apex:repeat>
+
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Duration_Hours__c'].Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.Duration_Hours__c}" /></div>
+      </td>
+    </tr>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Provision_Immediately__c'].Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.Provision_Immediately__c}" /></div>
+      </td>
+    </tr>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Requested_Start_Time__c'].Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.Requested_Start_Time__c}" /></div>
+      </td>
+    </tr>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Requested_End_Time__c'].Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.Requested_End_Time__c}" /></div>
+      </td>
+    </tr>
+
+    <apex:outputPanel rendered="{!accessNowPermGroups != null}" layout="none">
+    <tr>
+      <td scope="row">
+        <div>Permission Bundles</div>
+      </td>
+      <td scope="row" class="profileRO slds-hyphenate slds-text-align--right">
+      <apex:repeat value="{!accessNowPermGroups}" var="perm">
+        <div class="slds-m-top--x-small slds-m-bottom--small slds-badge"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></div>
+      </apex:repeat>
+      </td>
+    </tr>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!perms != null}" layout="none">
+    <tr>
+      <td scope="row">
+        <div>Permissions</div>
+      </td>
+      <td scope="row" class="profileRO slds-hyphenate slds-text-align--right">
+      <apex:repeat value="{!perms}" var="perm">
+        <div class="slds-m-top--x-small slds-m-bottom--small slds-badge"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></div>
+      </apex:repeat>
+      </td>
+    </tr>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!permGroups != null}" layout="none">
+    <tr>
+      <td scope="row">
+        <div>Permission Set Groups</div>
+      </td>
+      <td scope="row" class="profileRO slds-hyphenate slds-text-align--right">
+      <apex:repeat value="{!permGroups}" var="perm">
+        <div class="slds-m-top--x-small slds-m-bottom--small slds-badge"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></div>
+      </apex:repeat>
+      </td>
+    </tr>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!profiles != null}" layout="none">
+    <tr>
+      <td scope="row">
+        <div>Profiles</div>
+      </td>
+      <td scope="row" class="profileRO slds-hyphenate slds-text-align--right">
+      <apex:repeat value="{!profiles}" var="perm">
+        <div class="slds-m-top--x-small slds-m-bottom--small slds-badge"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></div>
+      </apex:repeat>
+      </td>
+    </tr>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!roles != null}" layout="none">
+    <tr>
+      <td scope="row">
+        <div>Roles</div>
+      </td>
+      <td scope="row" class="profileRO slds-hyphenate slds-text-align--right">
+      <apex:repeat value="{!roles}" var="perm">
+        <div class="slds-m-top--x-small slds-m-bottom--small slds-badge"><apex:outputText value="{!perm.perm.Permission__r.Name__c}" /></div>
+      </apex:repeat>
+      </td>
+    </tr>
+    </apex:outputPanel>
+
+  </tbody>
+</table>
+</div>
+</article>
+
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__sectionheadermetrics}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+
+<table class="slds-table slds-table--bordered slds-table--cell-buffer">
+  <tbody>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$Label.accessnow__lbl_createdby}" /></div>
+      </td>
+      <td scope="row" class="slds-text-align--right">
+        <div><apex:outputField value="{!req.CreatedById}" />&nbsp;-&nbsp;<apex:outputField value="{!req.CreatedDate}" /></div>
+      </td>
+    </tr>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$Label.accessnow__lbl_modifiedby}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.LastModifiedById}" />&nbsp;-&nbsp;<apex:outputField value="{!req.LastModifiedDate}" /></div>
+      </td>
+    </tr>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Admin_Page__c'].Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.Admin_Page__c}" /></div>
+      </td>
+    </tr>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Approved_On__c'].Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.Approved_On__c}" /></div>
+      </td>
+    </tr>
+    <apex:outputPanel layout="none" rendered="{!req.Last_Error__c != null}">
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Last_Error__c'].Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.Last_Error__c}" /></div>
+      </td>
+    </tr>
+    </apex:outputPanel>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Actual_Start_Time__c'].Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.Actual_Start_Time__c}" /></div>
+      </td>
+    </tr>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Request__c'].Fields['accessnow__Actual_End_Time__c'].Label}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputField value="{!req.Actual_End_Time__c}" /></div>
+      </td>
+    </tr>
+    <tr>
+      <td scope="row">
+        <div><apex:outputText value="{!$Label.accessnow__lbl_revokestatus}" /></div>
+      </td>
+      <td scope="row" class="slds-hyphenate slds-text-align--right">
+        <div><apex:outputText rendered="{!req.Automatically_Revoked__c}" value="{!$Label.accessnow__msg_revokeautomatic}" /><apex:outputText rendered="{!req.Manually_Revoked__c}" value="{!$Label.accessnow__msg_revokemanual}" /></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</article>
+
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$ObjectType['accessnow__ACNW_Setup_Audit_Log__c'].Label}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+          <table class="slds-table slds-table--bordered slds-table--striped">
+           <thead>
+            <tr class="slds-text-title--caps">
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Setup_Audit_Log__c'].Fields['Name'].Label}" /></div></th>
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Setup_Audit_Log__c'].Fields['accessnow__Date__c'].Label}" /></div></th>
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Setup_Audit_Log__c'].Fields['accessnow__Section__c'].Label}" /></div></th>
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Setup_Audit_Log__c'].Fields['accessnow__Activity__c'].Label}" /></div></th>
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Setup_Audit_Log__c'].Fields['accessnow__Logged_In_As__c'].Label}" /></div></th>
+            </tr>
+            </thead>
+            <tbody>
+            <apex:repeat value="{!setupAuditLog}" var="al">
+                <tr>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField value="{!al.Name}" /></td>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField value="{!al.Date__c}" /></td>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField value="{!al.Section__c}" /></td>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField value="{!al.Activity__c}" /></td>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField value="{!al.Logged_In_As__r.Name}" /></td>
+                </tr>
+            </apex:repeat>
+            </tbody>
+          </table>
+    </div>
+</article>
+
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$ObjectType['accessnow__ACNW_Data_Audit_Log__c'].Label}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+          <table class="slds-table slds-table--bordered slds-table--striped">
+           <thead>
+            <tr class="slds-text-title--caps">
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Data_Audit_Log__c'].Fields['Name'].Label}" /></div></th>
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Data_Audit_Log__c'].Fields['accessnow__Date__c'].Label}" /></div></th>
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Data_Audit_Log__c'].Fields['accessnow__Object_Name__c'].Label}" /></div></th>
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Data_Audit_Log__c'].Fields['accessnow__Parent_Name__c'].Label}" /></div></th>
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Data_Audit_Log__c'].Fields['accessnow__Field__c'].Label}" /></div></th>
+              <th scope="col"><div><apex:outputText value="{!$ObjectType['accessnow__ACNW_Data_Audit_Log__c'].Fields['accessnow__Logged_In_As__c'].Label}" /></div></th>
+            </tr>
+            </thead>
+            <tbody>
+            <apex:variable var="oldDate" value="{!now()}" />
+            <apex:variable var="oldId" value="" />
+            <apex:repeat value="{!dataAuditLog}" var="al">
+                <tr>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField rendered="{!oldId != al.Parent_Id__c || oldDate != al.Date__c.time}" value="{!al.Name}" /></td>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField rendered="{!oldId != al.Parent_Id__c || oldDate != al.Date__c.time}" value="{!al.Date__c}" /></td>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField rendered="{!oldId != al.Parent_Id__c || oldDate != al.Date__c.time}" value="{!al.Object_Name__c}" /></td>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField rendered="{!oldId != al.Parent_Id__c || oldDate != al.Date__c.time}" value="{!al.Parent_Name__c}" /></td>
+
+                    <td scope="row" class="slds-hyphenate"><apex:outputText rendered="{!oldId != al.Parent_Id__c || oldDate != al.Date__c.time}" value="" />
+                        <apex:outputPanel layout="none" rendered="{!al.Field__c == 'created'}">Created.</apex:outputPanel>
+                        <apex:outputPanel layout="none" rendered="{!al.Field__c == 'deleted'}">Deleted.</apex:outputPanel>
+                        <apex:outputPanel layout="none" rendered="{!al.Field__c == 'undeleted'}">Undeleted.</apex:outputPanel>
+                        <apex:outputPanel layout="none" rendered="{!al.Field__c == 'viewed'}">Viewed.</apex:outputPanel>
+                        <apex:outputPanel layout="none" rendered="{!al.Field__c != 'viewed' && al.Field__c != 'created' && al.Field__c != 'undeleted' && al.Field__c != 'deleted' && al.New_Value__c == ''}"><apex:outputText value="Deleted {!al.Old_Value__c} in " /><b><apex:outputText value="{!al.Field__c}" /></b>.</apex:outputPanel>
+                        <apex:outputPanel rendered="{!al.Field__c != 'viewed' && al.Field__c != 'created' && al.Field__c != 'deleted' && al.Field__c != 'undeleted' && al.New_Value__c != '' && al.Old_Value__c == ''}">Changed&nbsp;<b><apex:outputText value="{!al.Field__c}" /></b><apex:outputText value=" to {!al.New_Value__c}." /></apex:outputPanel>
+                        <apex:outputPanel rendered="{!al.Field__c != 'viewed' && al.Field__c != 'created' && al.Field__c != 'deleted' && al.Field__c != 'undeleted' && al.New_Value__c != '' && al.Old_Value__c != ''}">Changed&nbsp;<b><apex:outputText value="{!al.Field__c}" /></b><apex:outputText value=" from {!al.Old_Value__c} to {!al.New_Value__c}." /></apex:outputPanel>
+                    </td>
+                    <td scope="row" class="slds-hyphenate"><apex:outputField value="{!al.Logged_In_As__r.Name}" /></td>
+                </tr>
+                <apex:variable var="oldDate" value="{!al.Date__c.time}" />
+                <apex:variable var="oldId" value="{!al.Parent_Id__c}" />
+            </apex:repeat>
+            </tbody>
+          </table>
+    </div>
+</article>
+</apex:outputPanel>
+
+<!-- end readonly view -->
+    </apex:form>
+    <apex:form >
+        <apex:actionFunction name="reloadUserPermsFunc" action="{!reloadUserPermsFunc}" rerender="messages,userOptionsBlock" oncomplete="updateMessageClass()">
+            <apex:param value="" name="idd" />
+        </apex:actionFunction>
+    </apex:form>
+    </div>
+</apex:page>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AccessNow_Permission_Group__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Permission Bundle</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>ACNW_Permission__c.Type__c</field>
+            <operation>equals</operation>
+            <value>Permission Bundles</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>ACNW_Permission__c</referenceTo>
+    <relationshipLabel>Permission Bundle Components</relationshipLabel>
+    <relationshipName>Permission_Group_Components1</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

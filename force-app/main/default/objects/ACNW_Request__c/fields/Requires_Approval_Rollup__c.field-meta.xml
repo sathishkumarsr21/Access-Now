@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requires_Approval_Rollup__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Rollup to have sum of the permissions selected with approval required flag checked</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Rollup to have sum of the permissions selected with approval required flag checked</inlineHelpText>
+    <label>Requires Approval Rollup</label>
+    <summarizedField>ACNW_Request_Permission__c.Requires_Approval_Value__c</summarizedField>
+    <summaryForeignKey>ACNW_Request_Permission__c.Request__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

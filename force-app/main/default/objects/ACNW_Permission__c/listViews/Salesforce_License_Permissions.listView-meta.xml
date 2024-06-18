@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Salesforce_License_Permissions</fullName>
+    <columns>NAME</columns>
+    <columns>License_Required__c</columns>
+    <columns>Permission_Count__c</columns>
+    <columns>SF_Permission_Id__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>License_Required__c</field>
+        <operation>includes</operation>
+        <value>Salesforce</value>
+    </filters>
+    <label>Salesforce License Permissions</label>
+</ListView>

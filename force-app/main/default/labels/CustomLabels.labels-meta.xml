@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>ButtonCancelRequest</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ButtonCancelRequest</shortDescription>
+        <value>Cancel Request</value>
+    </labels>
+    <labels>
+        <fullName>ButtonRetry</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ButtonRetry</shortDescription>
+        <value>Retry</value>
+    </labels>
+    <labels>
+        <fullName>ButtonRevoke</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ButtonRevoke</shortDescription>
+        <value>Revoke</value>
+    </labels>
+    <labels>
+        <fullName>ButtonSave</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ButtonSave</shortDescription>
+        <value>Save</value>
+    </labels>
+    <labels>
+        <fullName>ButtonSaveAndSubmitForApproval</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ButtonSaveAndSubmitForApproval</shortDescription>
+        <value>Save &amp; Submit for Approval</value>
+    </labels>
+    <labels>
+        <fullName>ERR_AccessNowURLNotDefined</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_AccessNowURLNotDefined</shortDescription>
+        <value>Accessnow URL not defined in custom setting</value>
+    </labels>
+    <labels>
+        <fullName>ERR_AnotherRequestIsAlreadyInProgress</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_AnotherRequestIsAlreadyInProgress</shortDescription>
+        <value>Another request is already in progress: {0}</value>
+    </labels>
+    <labels>
+        <fullName>ERR_DataAuditLogObjectInvalid</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_DataAuditLogObjectInvalid</shortDescription>
+        <value>Please enter a valid Salesforce object API name</value>
+    </labels>
+    <labels>
+        <fullName>ERR_InProgressRequestsCannotBeDeleted</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_InProgressRequestsCannotBeDeleted</shortDescription>
+        <value>In Progress requests cannot be deleted</value>
+    </labels>
+    <labels>
+        <fullName>ERR_InvalidId</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_InvalidId</shortDescription>
+        <value>Invalid Id specified: {0}</value>
+    </labels>
+    <labels>
+        <fullName>ERR_InvalidObjectAPIName</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_InvalidObjectAPIName</shortDescription>
+        <value>Object {0} does not exist</value>
+    </labels>
+    <labels>
+        <fullName>ERR_NoPermissionsAvailable</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_NoPermissionsAvailable</shortDescription>
+        <value>No permissions available</value>
+    </labels>
+    <labels>
+        <fullName>ERR_PermissionSetGroupNotFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_PermissionSetGroupNotFound</shortDescription>
+        <value>Permission set group not found</value>
+    </labels>
+    <labels>
+        <fullName>ERR_PermissionSetNotFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_PermissionSetNotFound</shortDescription>
+        <value>Permission set not found</value>
+    </labels>
+    <labels>
+        <fullName>ERR_ProfileMappingNotFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_ProfileMappingNotFound</shortDescription>
+        <value>Profile mapping for {0} not found</value>
+    </labels>
+    <labels>
+        <fullName>ERR_ProfileNotFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_ProfileNotFound</shortDescription>
+        <value>Profile {0} not found</value>
+    </labels>
+    <labels>
+        <fullName>ERR_RequestAlreadyCompleted</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_RequestAlreadyCompleted</shortDescription>
+        <value>Already completed</value>
+    </labels>
+    <labels>
+        <fullName>ERR_RequestCannotBeEditedAfterApproval</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_RequestCannotBeEditedAfterApproval</shortDescription>
+        <value>Request cannot be edited after it has been approved or is in progress</value>
+    </labels>
+    <labels>
+        <fullName>ERR_RequestIsNotAvailableToSubmitForApproval</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_RequestIsNotAvailableToSubmitForApproval</shortDescription>
+        <value>Request is not available to submit for approval</value>
+    </labels>
+    <labels>
+        <fullName>ERR_RequestMustBeForTheFuture</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_RequestMustBeForTheFuture</shortDescription>
+        <value>Requested start time must be in the future</value>
+    </labels>
+    <labels>
+        <fullName>ERR_RequestNotAvailableForManualRevoke</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_RequestNotAvailableForManualRevoke</shortDescription>
+        <value>Request is not available for manual revoke</value>
+    </labels>
+    <labels>
+        <fullName>ERR_UserPermissionCannotBeChanged</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERR_UserPermissionCannotBeChanged</shortDescription>
+        <value>User permission cannot be changed</value>
+    </labels>
+    <labels>
+        <fullName>LBL_CreatedBy</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_CreatedBy</shortDescription>
+        <value>Created By</value>
+    </labels>
+    <labels>
+        <fullName>LBL_DeployAuditManageButtonUndeploy</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_DeployAuditManageButtonUndeploy</shortDescription>
+        <value>Remove</value>
+    </labels>
+    <labels>
+        <fullName>LBL_DeployAuditManageColumnObject</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_DeployAuditManageColumnObject</shortDescription>
+        <value>Object</value>
+    </labels>
+    <labels>
+        <fullName>LBL_DeployAuditManageExistingObjects</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_DeployAuditManageExistingObjects</shortDescription>
+        <value>Deployed Objects</value>
+    </labels>
+    <labels>
+        <fullName>LBL_DeployAuditManageNewObject</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_DeployAuditManageNewObject</shortDescription>
+        <value>Add Object</value>
+    </labels>
+    <labels>
+        <fullName>LBL_DeployAuditManageNewSaveButton</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_DeployAuditManageNewSaveButton</shortDescription>
+        <value>Add</value>
+    </labels>
+    <labels>
+        <fullName>LBL_DeployAuditManageTitle</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_DeployAuditManageTitle</shortDescription>
+        <value>Manage Audit Objects</value>
+    </labels>
+    <labels>
+        <fullName>LBL_ModifiedBy</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_ModifiedBy</shortDescription>
+        <value>Modified By</value>
+    </labels>
+    <labels>
+        <fullName>LBL_No</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_No</shortDescription>
+        <value>No</value>
+    </labels>
+    <labels>
+        <fullName>LBL_Requester</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_Requester</shortDescription>
+        <value>Requester&apos;s Name</value>
+    </labels>
+    <labels>
+        <fullName>LBL_RevokeStatus</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_RevokeStatus</shortDescription>
+        <value>Revoke Status</value>
+    </labels>
+    <labels>
+        <fullName>LBL_Yes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LBL_Yes</shortDescription>
+        <value>Yes</value>
+    </labels>
+    <labels>
+        <fullName>MSG_InsufficientPrivileges</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>MSG_InsufficientPrivileges</shortDescription>
+        <value>Insufficient privileges</value>
+    </labels>
+    <labels>
+        <fullName>MSG_OnlyOneRole</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>MSG_OnlyOneRole</shortDescription>
+        <value>Only a single role can be selected</value>
+    </labels>
+    <labels>
+        <fullName>MSG_ProfileOrPermissionSet</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>MSG_ProfileOrPermissionSet</shortDescription>
+        <value>Please choose a single profile or one or more permission sets/groups.</value>
+    </labels>
+    <labels>
+        <fullName>MSG_RequestSubmitted</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>MSG_RequestSubmitted</shortDescription>
+        <value>Request submitted</value>
+    </labels>
+    <labels>
+        <fullName>MSG_RequestUpdated</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>MSG_RequestUpdated</shortDescription>
+        <value>Requested updated</value>
+    </labels>
+    <labels>
+        <fullName>MSG_RevokeAutomatic</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>MSG_RevokeAutomatic</shortDescription>
+        <value>Automatic</value>
+    </labels>
+    <labels>
+        <fullName>MSG_RevokeManual</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>MSG_RevokeManual</shortDescription>
+        <value>Manual</value>
+    </labels>
+    <labels>
+        <fullName>MSG_SubmittedForRetry</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>MSG_SubmittedForRetry</shortDescription>
+        <value>Submitted for retry</value>
+    </labels>
+    <labels>
+        <fullName>SectionHeaderAccessNowPermissionGroups</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SectionHeaderAccessNowPermissionGroups</shortDescription>
+        <value>Select Permission Bundles</value>
+    </labels>
+    <labels>
+        <fullName>SectionHeaderMetrics</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SectionHeaderMetrics</shortDescription>
+        <value>System Details</value>
+    </labels>
+    <labels>
+        <fullName>SectionHeaderPermissionGroups</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SectionHeaderPermissionGroups</shortDescription>
+        <value>Select Permission Set Groups</value>
+    </labels>
+    <labels>
+        <fullName>SectionHeaderPermissions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SectionHeaderPermissions</shortDescription>
+        <value>Select Permissions</value>
+    </labels>
+    <labels>
+        <fullName>SectionHeaderProfiles</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SectionHeaderProfiles</shortDescription>
+        <value>Select Profiles</value>
+    </labels>
+    <labels>
+        <fullName>SectionHeaderRoles</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SectionHeaderRoles</shortDescription>
+        <value>Select Role</value>
+    </labels>
+    <labels>
+        <fullName>SectionHeaderSettings</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SectionHeaderSettings</shortDescription>
+        <value>Request Details</value>
+    </labels>
+</CustomLabels>

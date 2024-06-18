@@ -1,0 +1,40 @@
+<apex:page controller="DeployAuditTrigger">
+
+<c:zipFile >
+ <apex:repeat value="{!zipContents}" var="zc">
+ <c:zipEntry path="{!zc.fileName}" content="{!zc.content}" />
+ </apex:repeat>
+</c:zipFile>
+
+<script>
+var sfdcOnload = self.onload;
+self.onload = function() {
+  if (sfdcOnload) sfdcOnload();
+  generateZip(function(dat) {
+      deploy(dat);
+  });
+}
+</script>
+
+<apex:form >
+<apex:pageMessages id="messages" />
+<apex:actionFunction name="deploy" action="{!deploy}" oncomplete="deployComplete()" status="status" reRender="messages,cxa">
+  <apex:param name="zip" value="" />
+</apex:actionFunction>
+<apex:outputPanel layout="none" id="cxa">
+  <apex:outputPanel rendered="{!asyncId != null}">
+      <script>
+      document.location.href = '/changemgmt/monitorDeployment.apexp?id={!JSENCODE(asyncId)}';
+      </script>
+  </apex:outputPanel>
+</apex:outputPanel>
+
+<apex:actionStatus id="status">
+    <apex:facet name="start">
+        Please wait...
+    </apex:facet>
+</apex:actionStatus>
+
+</apex:form>
+
+</apex:page>

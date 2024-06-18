@@ -1,0 +1,7 @@
+<apex:component >
+    <apex:attribute name="path" type="String" description="" />
+    <apex:attribute name="content" type="String" description="" />
+    <script>
+        zipFile.file('{!JSENCODE(path)}', '{!JSENCODE(content)}');
+    </script>
+</apex:component>

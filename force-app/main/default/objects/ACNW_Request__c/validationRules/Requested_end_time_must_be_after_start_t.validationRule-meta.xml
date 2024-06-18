@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requested_end_time_must_be_after_start_t</fullName>
+    <active>true</active>
+    <errorConditionFormula>Requested_End_Time__c &lt;=  Requested_Start_Time__c</errorConditionFormula>
+    <errorMessage>Requested end time must be after start time</errorMessage>
+</ValidationRule>

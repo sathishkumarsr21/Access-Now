@@ -1,0 +1,14 @@
+<apex:component controller="LightningComponentCtrl">
+    <apex:attribute name="sObject" description="" type="SObject" assignTo="{!inputObject}" />
+    <apex:attribute name="field" description="" type="String" assignTo="{!fieldName}" />
+    <apex:attribute name="label" description="" type="String" />
+
+    <apex:outputPanel layout="none">
+        <div class="slds-form-element" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <span class="slds-form-element__label"><apex:outputText value="{!if(label==null,$ObjectType[objectName].Fields[field].Label,label)}" /></span>
+            <div class="slds-form-element__control" style="padding-left: 10px; padding-right: 10px; border: 1px solid #d8dde6; border-radius: .25rem">
+                <span class="slds-form-element__static"><apex:outputField value="{!sObject[field]}" />&nbsp;</span>
+            </div>
+        </div>
+    </apex:outputPanel>
+</apex:component>

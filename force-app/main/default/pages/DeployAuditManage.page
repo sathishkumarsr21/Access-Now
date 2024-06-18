@@ -1,0 +1,152 @@
+<apex:page controller="DeployAuditManage">
+<apex:includeScript value="{!$Resource.jquery_js}"/>
+<apex:slds />
+<style>
+.slds-scope .slds-page-header { background: transparent; border-bottom: 0px; }
+
+.slds-card__body {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: .75rem;
+}
+    
+.slds-hyphenate { white-space: normal !important; }
+</style>
+<script>
+function undeploy(o) {
+    document.location.href = 'DeployAuditTrigger?objectName=' + escape(o);
+}
+function deploy(o) {
+    var objx = document.getElementById('newObjectName');
+    var obj = [];
+    for (var i = 0; i < objx.options.length; i++) {
+        if (objx.options[i].selected) {
+        	obj.push(objx.options[i].value);
+        }
+    }
+    if (!obj.length) return false;
+
+    var frm = document.getElementById('DeployAuditTriggerForm');
+    frm.objectName.value = obj.join(',');
+    frm.submit();
+    //document.location.href = 'DeployAuditTrigger?objectName=' + escape(obj.join(',')) + '&deploy=1';
+}
+$(function() {
+    $.ajax({
+        type: "GET",
+        url: "/services/data/v35.0/sobjects/",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', "OAuth {!$Api.Session_ID}");
+            xhr.setRequestHeader('Accept', "application/json");
+        },
+        success: function (data) {
+            data = data.sobjects;
+            var triggerable = {};
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].triggerable) triggerable[data[i].name.toLowerCase()] = 1;
+            }
+            var no = $('#newObjectName');
+            $('option', no).each(function() {
+                var t = $(this);
+                if (!triggerable[t.val()]) t.remove();
+			});
+            no.css('visibility','visible');
+        }
+    });
+});
+</script>
+<div class="slds-scope">
+<apex:form id="mainForm">
+    <div class="slds-page-header">
+      <div class="slds-grid">
+        <div class="slds-col slds-has-flexi-truncate">
+          <div class="slds-media slds-no-space slds-grow">
+            <div class="slds-media__body">
+                <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate"><apex:outputText value="{!$Label.accessnow__lbl_deployauditmanagetitle}" /></h1>
+            </div>
+          </div>
+        </div>
+        <div class="slds-col slds-no-flex slds-grid slds-align-top">
+          <div class="slds-button-group" role="group">
+              <!-- for future use -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <article class="slds-card">
+      <div class="slds-card__header slds-grid">
+        <header class="slds-media slds-media--center slds-has-flexi-truncate">
+          <div class="slds-media__body">
+            <h2>
+              <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__lbl_deployauditmanagenewobject}" /></span>
+            </h2>
+          </div>
+        </header>
+      </div>
+      <div class="slds-card__body">
+            <fieldset class="slds-form--compound">
+              <legend class="slds-form-element__label"></legend>
+              <div class="form-element__group">
+				  <div class="slds-form-element__row">
+	                  <div class="slds-form-element slds-size--1-of-2">
+                        <apex:outputPanel layout="block" styleClass="slds-form-element" id="divTextInput">
+                            <label class="slds-form-element__label" for="newObjectName"><apex:outputText value="{!$Label.accessnow__lbl_deployauditmanagecolumnobject}" /></label>
+                            <div class="slds-form-element__control">
+                                <select style="visibility: hidden" size="10" multiple="multiple" id="newObjectName" class="slds-input">
+                                    <apex:repeat var="ol" value="{!objectList}">
+                                        <apex:repeat var="oli" value="{!ol}">
+                                            <option value="{!oli.value}"><apex:outputText value="{!oli.label}" /></option>
+                                        </apex:repeat>
+                                    </apex:repeat>
+                                </select>
+                                <br /><br />
+                                <apex:commandButton value="{!$Label.accessnow__lbl_deployauditmanagenewsavebutton}" styleClass="slds-button slds-button--neutral" onclick="deploy(); return false;" />
+                            </div>
+                        </apex:outputPanel>
+        	          </div>
+                  </div>
+                </div>
+          </fieldset>
+      </div>
+    </article>
+
+
+<article class="slds-card">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2>
+          <span class="slds-text-heading--small"><apex:outputText value="{!$Label.accessnow__lbl_deployauditmanageexistingobjects}" /></span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">
+          <table class="slds-table slds-table--bordered slds-table--striped">
+           <thead>
+            <tr class="slds-text-title--caps">
+                <th scope="col"><div><apex:outputText value="{!$Label.accessnow__lbl_deployauditmanagecolumnobject}" /></div></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!existingObjects}" var="o">
+                <tr class="dataRow odd">
+                    <td scope="row" class="slds-hyphenate"><span><apex:outputText value="{!o}" /></span></td>
+                    <td scope="row" class="slds-hyphenate"><a href="javascript:undeploy('{!JSENCODE(o)}')"><apex:outputText value="{!$Label.accessnow__lbl_deployauditmanagebuttonundeploy}" /></a></td>
+                </tr>
+                </apex:repeat>
+            </tbody>
+          </table>
+    </div>
+</article>
+
+</apex:form>
+    
+	<form id="DeployAuditTriggerForm" method="post" action="DeployAuditTrigger">
+    	<input type="hidden" name="deploy" value="1" />
+        <input type="hidden" name="objectName" value="" />
+    </form>
+</div>
+</apex:page>

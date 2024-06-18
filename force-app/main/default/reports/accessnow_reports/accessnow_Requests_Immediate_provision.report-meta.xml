@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>ACNW_Request__c.Provision_Immediately__c</field>
+    </columns>
+    <columns>
+        <field>ACNW_Request__c.Status__c</field>
+    </columns>
+    <columns>
+        <field>ACNW_Request__c.Reason_for_Escalation__c</field>
+    </columns>
+    <columns>
+        <field>ACNW_Request__c.Reference_Number__c</field>
+    </columns>
+    <columns>
+        <field>CUST_CREATED_NAME</field>
+    </columns>
+    <format>Tabular</format>
+    <name>accessnow - Reqs Provisioned Immediately</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$ACNW_Request__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CUST_CREATED_DATE</dateColumn>
+        <interval>INTERVAL_LASTTHISMONTH</interval>
+    </timeFrameFilter>
+</Report>

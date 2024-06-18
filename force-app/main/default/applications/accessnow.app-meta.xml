@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <defaultLandingTab>ACNW_Request__c</defaultLandingTab>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <label>accessnow</label>
+    <logo>accessnow/accessnow_logo_jpg2.png</logo>
+    <tabs>ACNW_Request__c</tabs>
+    <tabs>ACNW_Permission__c</tabs>
+    <tabs>ACNW_User_Permission__c</tabs>
+    <tabs>ACNW_Setup_Audit_Log__c</tabs>
+    <tabs>ACNW_Data_Audit_Log__c</tabs>
+    <tabs>ACNW_Data_Audit_Log_Object__c</tabs>
+    <tabs>Audit_Triggers</tabs>
+</CustomApplication>

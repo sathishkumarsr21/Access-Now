@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>requested_time_required</fullName>
+    <active>true</active>
+    <errorConditionFormula>isblank(Requested_Start_Time__c) &amp;&amp; !Provision_Immediately__c</errorConditionFormula>
+    <errorMessage>Requested Start Time is required if not set to Provision Immediately</errorMessage>
+</ValidationRule>

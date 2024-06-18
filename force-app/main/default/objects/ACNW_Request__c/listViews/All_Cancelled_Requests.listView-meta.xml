@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Cancelled_Requests</fullName>
+    <columns>NAME</columns>
+    <columns>Reference_Number__c</columns>
+    <columns>Reason_for_Escalation__c</columns>
+    <columns>Requested_Start_Time__c</columns>
+    <columns>Requested_End_Time__c</columns>
+    <columns>Duration_Hours__c</columns>
+    <columns>Approved_On__c</columns>
+    <columns>CREATEDBY_USER.ALIAS</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Cancelled</value>
+    </filters>
+    <label>All Cancelled Requests</label>
+</ListView>

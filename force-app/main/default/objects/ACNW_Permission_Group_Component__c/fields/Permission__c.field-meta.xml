@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Permission__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Permission</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>ACNW_Permission__c.Type__c</field>
+            <operation>notEqual</operation>
+            <value>Permission Bundles</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>ACNW_Permission__c</referenceTo>
+    <relationshipLabel>Permission Bundle Components (Permission)</relationshipLabel>
+    <relationshipName>Permission_Group_Components2</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>
